@@ -1,38 +1,55 @@
 #!/bin/bash
 
-# Check if a directory argument is provided
+# Check if an argument is provided
 if [ -z "$2" ]; then
+    clear
+    echo " "
+    echo "========================"
+    echo "File Renaming"
+    echo "========================"
+    echo " "
     echo "Usage: $0 <directory> <startingValue>"
+    echo " "
+    echo "Starting value is equivilant to first chapter number - i.e. for a file with chapters 10 - 30, you would set this to 10, whereas chapters 1 - 9, you would set this to 1."
+    echo " "
+    echo "Also, please note that first chapters up to 9 must be done together FIRST, then move these files away and complete remaining files. This is due to numbering by computers vs numbering by humans (reading chapter 10 and chapter 11 as 1.0 and 1.1 respectively)."
+    echo " "
+    echo "########################################################################"
+    echo "# ERROR: Please try again with correct command line arguments supplied"
+    echo "########################################################################"
+    echo " "
     exit 1
 fi
 
-# Specify the directory from the command line argument
+# Get variables from command line
 directory="$1"
-# Specify first file number (i.e. 1 for first file to be "01_Chapter 1" or 10 to be "10_Chapter 10")
 startingValue="$2"
 
-# Check if the specified directory exists
+# Check if the directory exists
 if [ ! -d "$directory" ]; then
-    echo "Error: Directory '$directory' not found."
+    clear
+    echo " "
+    echo "########################################################################"
+    echo "# ERROR: Directory '$directory' not found"
+    echo "########################################################################"
+    echo " "
     exit 1
 fi
 
 cd "$directory" || exit
 
-# Initialize a Chapter Number variable (based on command line argument 2)
+# Value we loop FROM
 i="$startingValue"
 
-# Loop through each file in the directory
+# Loop through each file
 for file in *; do
-    # Check if the item is a file
+    # Check if item is a file
     if [ -f "$file" ]; then
-        # Extract extension
+        # Get extension
         extension="${file##*.}"
 
-        # Generate the new name with the correct format
+        # Generate new name and rename
         new_name=$(printf "%02d_Chapter %d.%s" "$i" "$i" "$extension")
-
-        # Renaming
         mv "$file" "$new_name"
 
         ((i++))
@@ -41,5 +58,4 @@ done
 
 echo "File renaming complete."
 
-# NOTE: This code currently works for chapters up to 9 files, but is buggy when > 9. Due to file renaming. Can split up files in batches of 10 (for now).
-# This is due to how humans read numbering vs computers.
+# NOTE: The first 9 chapters must be done seperately. All other chapters after can be done together!
