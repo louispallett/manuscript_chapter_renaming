@@ -34,6 +34,7 @@ This will make the rename.sh file executable. You can now execute the file with 
 This programme requires two command line arguments: the directory you wish to rename the files and the starting number you want the first file to be renamed to. For example:
 
 ```sh
+# ./rename.sh <directory> <startingValue>
 ./rename.sh myBook/ 1
 ```
 
